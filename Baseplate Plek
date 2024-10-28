@@ -1,0 +1,34 @@
+-- Remove Atmosphere from Lighting
+local lighting = game:GetService("Lighting")
+local atmosphere = lighting:FindFirstChildOfClass("Atmosphere")
+
+if atmosphere then
+    atmosphere:Destroy()  -- Remove the Atmosphere instance
+end
+
+-- Function to delete a folder if it exists
+local function deleteFolder(folderName, parent)
+    local folder = parent:FindFirstChild(folderName)
+    if folder and folder:IsA("Folder") then
+        folder:Destroy()
+    end
+end
+
+-- Delete specific folders
+deleteFolder("Ocean", game.Workspace.World)
+deleteFolder("Folder", game.Workspace)
+
+-- Define the path to the 'floor' folder
+local floorFolder = game.Workspace.World.Regions.Terrain.River.RiverCave.PlekCave:FindFirstChild("floor")
+
+-- Check if the 'floor' folder exists, then delete it
+if floorFolder then
+    floorFolder:Destroy()  -- Delete the entire floor folder
+
+    -- Create a new Baseplate
+    local baseplate = Instance.new("Part")
+    baseplate.Size = Vector3.new(900, 5, 900)  -- Size of 900x900 and height of 5
+    baseplate.Position = Vector3.new(-3229, -600, 1356)  -- Spawn location
+    baseplate.Anchored = true  -- Make sure the baseplate stays in place
+    baseplate.Parent = game.Workspace  -- Parent it to the Workspace
+end
