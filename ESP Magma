@@ -1,0 +1,44 @@
+-- Define the folder containing the "Tree" models
+local treeFolder = workspace.World.TreeRegions.MagmaCave_Special
+local modelName = "Tree"
+
+-- Function to create ESP on a model
+local function createESP(model)
+    if model:FindFirstChildOfClass("MeshPart") then
+        local highlight = Instance.new("Highlight")
+        highlight.Adornee = model
+        highlight.FillColor = Color3.new(1, 1, 1)  -- White color
+        highlight.FillTransparency = 0.5           -- Set transparency
+        highlight.OutlineTransparency = 0          -- Fully visible outline
+        highlight.Parent = model
+    end
+end
+
+-- Function to remove ESP from a model
+local function removeESP(model)
+    local highlight = model:FindFirstChildOfClass("Highlight")
+    if highlight then
+        highlight:Destroy()
+    end
+end
+
+-- Apply ESP to all existing "Tree" models
+for _, model in ipairs(treeFolder:GetChildren()) do
+    if model.Name == modelName and model:IsA("Model") then
+        createESP(model)
+    end
+end
+
+-- Listen for new "Tree" models being added
+treeFolder.ChildAdded:Connect(function(model)
+    if model.Name == modelName and model:IsA("Model") then
+        createESP(model)
+    end
+end)
+
+-- Clean up ESP when a "Tree" model is removed
+treeFolder.ChildRemoved:Connect(function(model)
+    if model.Name == modelName then
+        removeESP(model)
+    end
+end)
